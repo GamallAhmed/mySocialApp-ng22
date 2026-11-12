@@ -1,0 +1,11 @@
+input:focus, select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 38, 141, 0.2); /* لون الـ MainColor مع شفافية */
+  border-color: var(--color-mainColor);
+}
+
+/* عشان نظبط شكل أيقونة التاريخ Native */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+  cursor: pointer;
+}

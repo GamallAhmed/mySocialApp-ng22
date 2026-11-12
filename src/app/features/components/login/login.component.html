@@ -1,1 +1,133 @@
-<p>login works!</p>
+<section class="min-h-screen bg-gray-50 flex items-center justify-center p-4 font-sans">
+  <div class="max-w-325 w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+    
+    <div class="pr-0 lg:pr-8">
+      <h1 class="text-4xl lg:text-5xl font-bold text-mainColor mb-4">Social Connect</h1>
+      <p class="text-xl text-gray-700 mb-8">
+        Connect with friends and the world around you on Social Connect.
+      </p>
+
+      <div class="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+        <h2 class="text-sm font-bold text-mainColor tracking-wide mb-2 uppercase">
+          ABOUT SOCIAL CONNECT
+        </h2>
+        <h3 class="text-lg font-bold text-gray-900 mb-3">
+          Egypt's Leading IT Training Center Since 2012
+        </h3>
+        <p class="text-sm text-gray-600 leading-relaxed mb-6">
+          Social Connect is the premier IT training center in Egypt, established in 2012. We
+          specialize in delivering high-quality training courses in programming, web development,
+          and application development. We've identified the unique challenges people may face when
+          learning new technology and made efforts to provide strategies to overcome them.
+        </p>
+
+        <div class="grid grid-cols-2 lg:grid-cols-3 gap-3">
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p class="text-mainColor font-bold">2012</p>
+            <p class="text-xs text-gray-600 font-medium">FOUNDED</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p class="text-mainColor font-bold">40K+</p>
+            <p class="text-xs text-gray-600 font-medium">GRADUATES</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p class="text-mainColor font-bold">50+</p>
+            <p class="text-xs text-gray-600 font-medium">PARTNER COMPANIES</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p class="text-mainColor font-bold">5</p>
+            <p class="text-xs text-gray-600 font-medium">BRANCHES</p>
+          </div>
+          <div class="bg-blue-50 border border-blue-100 rounded-xl p-3">
+            <p class="text-mainColor font-bold">20</p>
+            <p class="text-xs text-gray-600 font-medium">DIPLOMAS AVAILABLE</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-100 rounded-3xl p-6 lg:p-8 shadow-xl w-full max-w-md mx-auto lg:ml-auto">
+      
+      <div class="flex bg-gray-50 rounded-xl p-1 mb-8">
+        <button routerLink="/login" type="button" class="flex-1 py-2 text-sm font-semibold text-mainColor bg-white rounded-lg shadow-sm transition-all">
+           Login 
+        </button>
+        <button routerLink="/register" type="button" class="flex-1 py-2 text-sm font-semibold text-gray-500 hover:text-mainColor transition-colors">
+          Register
+        </button>
+      </div>
+
+      <h2 class="text-2xl font-bold text-gray-900 mb-1">Welcome Back</h2>
+      <p class="text-sm text-gray-500 mb-6">Please enter your details to sign in.</p>
+
+      <form (ngSubmit)="sendLoginData()" [formGroup]="loginForm" class="flex flex-col gap-4">
+        
+        <!-- Email -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+              <i class="fa-solid fa-at"></i>
+            </div>
+            <input formControlName="email" type="email" 
+              class="w-full bg-gray-50 border text-gray-900 text-sm rounded-xl block pl-10 p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-mainColor/20 focus:border-mainColor"
+              [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              [class.border-gray-200]="loginForm.get('email')?.valid || !loginForm.get('email')?.touched"
+              placeholder="Email address" />
+          </div>
+          @if (loginForm.get('email')?.invalid && loginForm.get('email')?.touched) {
+            <p class="text-red-500 text-xs mt-1 ml-1">
+              @if (loginForm.get('email')?.hasError('required')) { Email is required. }
+              @else if (loginForm.get('email')?.hasError('email')) { Please enter a valid email address. }
+            </p>
+          }
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
+              <i class="fa-solid fa-key"></i>
+            </div>
+            <input formControlName="password" type="password" 
+              class="w-full bg-gray-50 border text-gray-900 text-sm rounded-xl block pl-10 p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-mainColor/20 focus:border-mainColor"
+              [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              [class.border-gray-200]="loginForm.get('password')?.valid || !loginForm.get('password')?.touched"
+              placeholder="Password" />
+          </div>
+          @if (loginForm.get('password')?.invalid && loginForm.get('password')?.touched) {
+            <p class="text-red-500 text-xs mt-1 ml-1">
+              @if (loginForm.get('password')?.hasError('required')) { Password is required. }
+            </p>
+          }
+        </div>
+
+        <!-- رسالة النجاح (فوق الزرار) -->
+        @if (successMsg()) {
+          <div class="flex items-center p-4 mt-2 text-sm text-green-800 rounded-xl bg-green-50 border border-green-200 w-full shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-check flex-shrink-0 mr-3 text-lg text-green-600"></i>
+            <div>
+              <span class="font-medium">Success!</span> {{ successMsg() }}
+            </div>
+          </div>
+        }
+
+        <!-- رسالة الخطأ (فوق الزرار) -->
+        @if (msgText()) {
+          <div class="flex items-center p-4 mt-2 text-sm text-red-800 rounded-xl bg-red-50 border border-red-200 w-full shadow-sm" role="alert">
+            <i class="fa-solid fa-circle-exclamation flex-shrink-0 mr-3 text-lg text-red-600"></i>
+            <div>
+              <span class="font-medium">Error!</span> {{ msgText() }}
+            </div>
+          </div>
+        }
+
+        <!-- زر التسجيل (Login) -->
+        <button type="submit" [disabled]="loginForm.invalid"
+          class="w-full text-white bg-mainColor hover:bg-blue-900 disabled:bg-gray-400 disabled:cursor-not-allowed focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-xl text-sm px-5 py-3.5 text-center mt-2 transition-colors">
+          Login
+        </button>
+        
+      </form>
+    </div>
+  </div>
+</section>
