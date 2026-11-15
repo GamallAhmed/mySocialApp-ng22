@@ -51,7 +51,7 @@
     <div
       class="bg-white border  border-gray-100 rounded-3xl p-6 lg:p-8 shadow-xl w-full max-w-md mx-auto lg:ml-auto"
     >
-      <!-- التابس (Login / Register) -->
+      <!-- tabs(Login / Register) -->
       <div class="flex bg-gray-50 rounded-xl p-1 mb-8">
         <button
         routerLink="/login"
@@ -235,6 +235,7 @@
             <input
               formControlName="password"
               type="password"
+              (input)="registerForm.get('rePassword')?.updateValueAndValidity()"
               class="w-full bg-gray-50 border text-gray-900 text-sm rounded-xl block pl-10 p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-mainColor/20 focus:border-mainColor"
               [class.border-red-500]="
                 registerForm.get('password')?.invalid && registerForm.get('password')?.touched
@@ -259,35 +260,30 @@
         <!-- Confirm Password -->
         <div>
           <div class="relative">
-            <div
-              class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400"
-            >
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
               <i class="fa-solid fa-key"></i>
             </div>
             <input
               formControlName="rePassword"
               type="password"
               class="w-full bg-gray-50 border text-gray-900 text-sm rounded-xl block pl-10 p-3 transition-colors focus:outline-none focus:ring-2 focus:ring-mainColor/20 focus:border-mainColor"
-              [class.border-red-500]="
-                registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched
-              "
-              [class.border-gray-200]="
-                registerForm.get('rePassword')?.valid || !registerForm.get('rePassword')?.touched
-              "
+              [class.border-red-500]="registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched || (registerForm.hasError('mismatch') && registerForm.get('rePassword')?.touched)"
+              [class.border-gray-200]="registerForm.get('rePassword')?.valid && !registerForm.hasError('mismatch')"
               placeholder="Confirm password"
             />
           </div>
-          @if (registerForm.get('rePassword')?.invalid && registerForm.get('rePassword')?.touched) {
+          
+          @if (registerForm.get('rePassword')?.hasError('required') && registerForm.get('rePassword')?.touched) {
             <p class="text-red-500 text-xs mt-1 ml-1">
-              @if (registerForm.get('rePassword')?.hasError('required')) {
-                Please confirm your password.
-              } @else if (registerForm.get('rePassword')?.hasError('mismatch')) {
-                Passwords do not match.
-              }
+              Repassword is Required
+            </p>
+          }
+          @if (registerForm.hasError('mismatch') && registerForm.get('rePassword')?.touched) {
+            <p class="text-red-500 text-xs mt-1 ml-1">
+              Passwords do not match.
             </p>
           }
         </div>
-
         <!-- زر التسجيل -->
         <button
           type="submit"

@@ -19,10 +19,8 @@ export class LoginComponent {
   loginForm = new FormGroup(
     {
       email: new FormControl('', [Validators.required, Validators.email]),
-      // شلت الـ Pattern من هنا عشان منعطلش اليوزر لو الباسورد بتاعه قديم
       password: new FormControl('', [Validators.required]),
     },
-    { updateOn: 'blur' },
   );
 
   sendLoginData(): void {

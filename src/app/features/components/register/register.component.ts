@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../../core/auth/services/auth.service';
 import { Router, RouterLink } from '@angular/router';
 
@@ -12,20 +12,33 @@ import { Router, RouterLink } from '@angular/router';
 export class RegisterComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly formBuilder=inject(FormBuilder)
   
-  // رسالة الخطأ
   msgText = signal<string>("");
   successMsg = signal<string>("");
-  registerForm = new FormGroup({
-    name: new FormControl("", [Validators.required, Validators.minLength(3)]),
-    username: new FormControl(""),
-    email: new FormControl("", [Validators.required, Validators.email]),
-    dateOfBirth: new FormControl("", [Validators.required]),
-    gender: new FormControl("", [Validators.required]),
-    password: new FormControl("", [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]),
-    rePassword: new FormControl("", [Validators.required]),
-  }, { updateOn: 'blur' });
+  registerForm=this.formBuilder.group({
+      name:['', [Validators.required, Validators.minLength(3)]],
+      username:[''],
+      dateOfBirth:['', [Validators.required]],
+      email:['', [Validators.required, Validators.email]],
+      gender:['', [Validators.required]],
+      password:['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]],
+      rePassword:['', [Validators.required]]
+  }, { validators:this.confirmPassword})
 
+  //confirm password function
+  confirmPassword(group: AbstractControl) {
+    const password = group.get('password')?.value;
+    const rePassword = group.get('rePassword')?.value;
+    if (password !== rePassword) {
+      return { mismatch: true }; 
+    } 
+    else{
+        return null;
+    }
+    
+    
+  }
   sendRegisterData(): void {
     if (this.registerForm.valid) {
       
@@ -70,4 +83,5 @@ export class RegisterComponent {
       this.registerForm.markAllAsTouched();
     }
   }
+
 }
