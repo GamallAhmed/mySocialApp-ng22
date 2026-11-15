@@ -9,15 +9,19 @@ import { NotificationComponent } from './features/components/notification/notifi
 import { ChangePasswordComponent } from './features/components/change-password/change-password.component';
 import { ForgetPasswordComponent } from './features/components/forget-password/forget-password.component';
 import { NotFoundComponent } from './features/components/not-found/not-found.component';
+import { authGuard } from './core/auth/guards/auth-guard';
+import { userLoggedGuard } from './core/auth/guards/user-logged-guard';
 
 export const routes: Routes = [
     {path:'',redirectTo:'login',pathMatch:'full'},
-    {path:'',component:AuthLayoutComponent,children:[
+    {path:'',component:AuthLayoutComponent,canActivate:[userLoggedGuard]
+        ,children:[
         {path:'login',component:LoginComponent,title:'Login'},
         {path:'register',component:RegisterComponent,title:'Register'},
         {path:'forgetPassword',component:ForgetPasswordComponent,title:'forget Password'}
     ]},
-    {path:'',component:MainLayoutComponent,children:[
+    {path:'',component:MainLayoutComponent, canActivate:[authGuard],
+        children:[
         {path:'profile',component:ProfileComponent,title:'My Profile'},
         {path:'timeline',component:TimelineComponent,title:'Time Line'},
         {path:'notifications',component:NotificationComponent,title:'Notification'},

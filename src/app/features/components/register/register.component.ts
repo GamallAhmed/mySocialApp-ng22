@@ -25,7 +25,7 @@ export class RegisterComponent {
       password:['', [Validators.required, Validators.pattern('^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$')]],
       rePassword:['', [Validators.required]]
   }, { validators:this.confirmPassword})
-
+ 
   //confirm password function
   confirmPassword(group: AbstractControl) {
     const password = group.get('password')?.value;
@@ -41,14 +41,13 @@ export class RegisterComponent {
   }
   sendRegisterData(): void {
     if (this.registerForm.valid) {
-      
-      // 1. مسح الرسالة القديمة
       this.msgText.set('');
 
       this.authService.signUp(this.registerForm.value).subscribe({
         next: (res) => {
           console.log('Success', res);
           this.successMsg.set('Account created successfully! Redirecting to login...');
+
           setTimeout(() => {
             this.router.navigate(['/login']);
           }, 2000);

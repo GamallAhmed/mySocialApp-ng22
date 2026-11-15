@@ -25,7 +25,6 @@ export class LoginComponent {
 
   sendLoginData(): void {
     if (this.loginForm.valid) {
-      // 1. مسح الرسايل القديمة
       this.msgText.set('');
       this.successMsg.set('');
 
@@ -33,10 +32,9 @@ export class LoginComponent {
         next: (res) => {
           console.log('Success', res);
 
-          // 2. إظهار رسالة النجاح
           this.successMsg.set('Login successful! Redirecting...');
-
-          // 3. التحويل للـ Timeline بعد ثانيتين
+          localStorage.setItem('token',res.data.token);
+          localStorage.setItem('user',JSON.stringify(res.data.user))
           setTimeout(() => {
             this.router.navigate(['/timeline']);
           }, 2000);
